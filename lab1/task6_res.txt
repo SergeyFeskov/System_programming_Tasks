@@ -1,0 +1,4 @@
+for_find/abiba.exe
+for_find/ac.exe
+for_find/new_dir/a.exe
+for_find/new_dir/hoba.exe

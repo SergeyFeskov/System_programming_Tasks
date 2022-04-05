@@ -1,0 +1,4 @@
+for_task6/abiba.exe
+for_task6/ac.exe
+for_task6/new_dir/a.exe
+for_task6/new_dir/hoba.exe
