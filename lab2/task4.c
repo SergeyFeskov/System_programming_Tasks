@@ -64,12 +64,6 @@ int main(int argc, char* argv[]) {
 
     int src_char = fgetc(src_file);
     while (src_char != EOF) {
-        if (ferror(src_file) != 0) {
-            handle_file_error(src_name);
-            close_files(files, 2);
-            return 1;
-        }
-
         if (fputc(src_char, dest_file) == EOF) {
             handle_file_error(dest_name);
             close_files(files, 2);
@@ -77,6 +71,12 @@ int main(int argc, char* argv[]) {
         }
 
         src_char = fgetc(src_file);
+    }
+
+    if (ferror(src_file) != 0) {
+        handle_file_error(src_name);
+        close_files(files, 2);
+        return 1;
     }
 
     struct stat src_stat;
