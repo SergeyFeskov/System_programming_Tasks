@@ -5,10 +5,18 @@
 #include "stdlib.h"
 #include "string.h"
 #include "stdbool.h"
+#include "errno.h"
+#include "limits.h"
+
+enum VALIDATE_INPUT_ERRS {
+    VIE_NOTINT = 1,
+    VIE_OVERFLOW,
+    VIE_NOTINRANGE
+};
 
 void output_script_help();
 void handle_file_error(char* filename, FILE* file);
-bool is_integer(char* str);
+int validate_int_param(char* str, int* result_ptr, int left_range_border, int right_range_border);
 
 int main(int argc, char* argv[]) {
     /*--------------------------------------------*/
@@ -32,27 +40,29 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if (!is_integer(argv[2])) {
-        fprintf(stderr, "ERROR: second argument isn't integer\n");
-        output_script_help();
-        return 1;
+    int strings_num;
+    switch (validate_int_param(argv[2], &strings_num, 0, INT_MAX)) {
+        case VIE_NOTINT:
+            fprintf(stderr, "ERROR: second argument isn't integer\n");
+            output_script_help();
+            return 1;
+
+        case VIE_OVERFLOW:
+            fprintf(stderr, "ERROR: second argument causes overflow\n");
+            return 1;
+
+        case VIE_NOTINRANGE:
+            fprintf(stderr, "ERROR: second argument is negative\n");
+            output_script_help();
+            return 1;
     }
-
-    int strings_num = atoi(argv[2]);
-
-    if (strings_num < 0) {
-        fprintf(stderr, "ERROR: second argument is negative\n");
-        output_script_help();
-        return 1;
-    }
-
 
     /*--------------------------------------------*/
     /*  SCRIPT MAIN PART                          */
     /*--------------------------------------------*/
 
     while (true) {
-        int strings_left = strings_num;
+        long strings_left = strings_num;
 
         // loop for each pack of STRINGS_NUM strings
         // if STRINGS_NUM == 0, loop will be endless
@@ -86,6 +96,26 @@ int main(int argc, char* argv[]) {
         // waiting for print another STRINGS_NUM strings
         getchar();
     }
+}
+
+int validate_int_param(char* str, int* result_ptr, int left_range_border, int right_range_border) {
+    char* endptr;
+    long long_res = strtol(str, &endptr, 10);
+
+    if (*endptr != '\0' || endptr == str) {
+        return VIE_NOTINT;
+    }
+
+    if (long_res < INT_MIN || long_res > INT_MAX) {
+        return VIE_OVERFLOW;
+    }
+    *result_ptr = (int)long_res;
+
+    if (*result_ptr < left_range_border || *result_ptr > right_range_border) {
+        return VIE_NOTINRANGE;
+    }
+
+    return 0;
 }
 
 bool is_integer(char* str) {
