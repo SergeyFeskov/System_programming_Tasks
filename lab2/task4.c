@@ -1,16 +1,15 @@
 //
 // Created by serus on 4.04.22.
 //
-#include "stdio.h"
-#include "sys/stat.h"
-#include "stdlib.h"
-#include "string.h"
-#include "stdbool.h"
+#include <stdio.h>
+#include <sys/stat.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 #include <unistd.h>
 
 void output_script_help();
 void handle_file_error(char* filename);
-bool is_integer(char* str);
 bool close_files(FILE** files[], int files_am);
 bool file_exists(char* filename);
 
@@ -127,4 +126,5 @@ void handle_file_error(char* filename) {
     char* error_header = calloc(strlen(filename) + 100, sizeof(char));
     sprintf(error_header, "ERROR(with %s file)", filename);
     perror(error_header);
+    free(error_header);
 }

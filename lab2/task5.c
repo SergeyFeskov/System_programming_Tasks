@@ -1,12 +1,12 @@
 //
 // Created by serus on 4.04.22.
 //
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
-#include "errno.h"
-#include "dirent.h"
+#include <errno.h>
+#include <dirent.h>
 
 void output_script_help();
 void handle_file_error(char* filename, char* filetype);
@@ -37,6 +37,7 @@ int main(int argc, char* argv[]) {
     } else {
         printf("\nOUTPUT_RESULT: Output of %s is successful.\n", cwd_path);
     }
+    free(cwd_path);
 
     if (output_dir_content("/") == 1) {
         printf("\nOUTPUT_RESULT: Output of root dir ('/') failed.\n");
@@ -97,4 +98,5 @@ void handle_file_error(char* filename, char* filetype) {
     char* error_header = calloc(strlen(filename) + 100, sizeof(char));
     sprintf(error_header, "ERROR(with %s %s)", filename, filetype);
     perror(error_header);
+    free(error_header);
 }

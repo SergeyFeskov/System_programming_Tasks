@@ -17,6 +17,7 @@ void handle_file_error(char* filename, int fd) {
     char* error_header = calloc(strlen(filename) + 100, sizeof(char));
     sprintf(error_header, "ERROR(with %s file)", filename);
     perror(error_header);
+    free(error_header);
     close(fd);
 }
 
@@ -39,7 +40,7 @@ int main(int argc, char* argv[]) {
     }
 
     printf("Enter message you want to write in %s.\n", filename);
-    printf("(to stop input press Ctrl+F)\n");
+    printf("(to stop input press $)\n");
     int input_char = getchar();
     while (input_char != '$') {
         if (write(fd, &input_char, 1) == -1) {

@@ -1,15 +1,13 @@
 //
 // Created by serus on 5.04.22.
 //
-#include "stdio.h"
-#include "sys/stat.h"
-#include "stdlib.h"
-#include "string.h"
-#include "stdbool.h"
-#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 #include <limits.h>
-#include "errno.h"
-#include "dirent.h"
+#include <errno.h>
+#include <dirent.h>
 
 enum VALIDATE_INPUT_ERRS {
     VIE_NOTINT = 1,
@@ -31,7 +29,6 @@ typedef struct GroupNode {
     TFileNode* same_files;
     struct GroupNode* next;
 } TGroupNode;
-
 
 
 void output_script_help();
@@ -112,8 +109,7 @@ int main(int argc, char* argv[]) {
         ret_code = 1;
     }
     close_dir(main_dir);
-    printf("\n");
-    printf("Parsing of %s directory completed completed.\n\n", argv[1]);
+    printf("Parsing of %s directory completed.\n\n", argv[1]);
 
     printf("Output of groups of files with same content.\n");
     TGroupNode* curr_group = groups_list;
@@ -227,7 +223,6 @@ int parse_dir(DIR* dir, char* dir_path) {
             case DT_REG:
                 strcpy(filename + strlen(dir_path) + shift, curr_dir_el->d_name);
                 file_size = get_size_by_name(filename);
-                printf("%d", (int) file_size);
                 if (file_size >= N1 && file_size <= N2) {
                     insert_file(filename);
                 }
