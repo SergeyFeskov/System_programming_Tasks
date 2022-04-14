@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
     }
 
     if (chmod(dest_name, src_stat.st_mode) == -1) {
-        handle_file_error(src_name);
+        handle_file_error(dest_name);
         close_files(files, 2);
         return 1;
     }

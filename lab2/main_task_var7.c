@@ -359,4 +359,5 @@ void handle_file_error(char* filename, char* filetype) {
     char* error_header = calloc(strlen(filename) + 100, sizeof(char));
     sprintf(error_header, "ERROR(with %s %s)", filename, filetype);
     perror(error_header);
+    free(error_header);
 }
